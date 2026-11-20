@@ -1,11 +1,25 @@
 #!/usr/bin/env python3
-"""Entrypoint for the news-image-20261119 entry.
+"""Copy the pre-rendered entry.png to the output directory.
 
-The front page is built by generate.py in this same directory;
-this file only runs it, so the program is `python3 main.py`.
+Self-contained: stdlib only, no local module imports.
+Works under `python3 -P -s` from any working directory.
 """
 
-import generate
+import os
+import shutil
+from pathlib import Path
+
+
+def main():
+    source = Path(__file__).resolve().parent / "entry.png"
+    output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    output_dir.mkdir(parents=True, exist_ok=True)
+    destination = output_dir / "entry.png"
+    shutil.copyfile(source, destination)
+    size = destination.stat().st_size
+    print(f"Output: {destination}")
+    print(f"Size: {size} bytes")
+
 
 if __name__ == "__main__":
-    generate.main()
+    main()
